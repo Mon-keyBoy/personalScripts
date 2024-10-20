@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Check if the script received enough arguments (file path and commit message)
+if [ $# -lt 1 ]; then
+    echo "Usage: <file-path> [commit-message]"
+    exit 1
+fi
+
+# Variables
+FILE_PATH=$1
+COMMIT_MSG=${2:-"."} # Default commit message is a period if not provided
+
+# Step 1: Check if the file exists
+if [ ! -f "$FILE_PATH" ]; then
+    echo "Error: File '$FILE_PATH' does not exist."
+    exit 1
+fi
+
+# Step 2: Add the file to the Git staging area
+echo "Adding file '$FILE_PATH' to Git..."
+git add "$FILE_PATH"
+
+# Step 3: Commit the changes with the provided message
+echo "Committing changes with message: $COMMIT_MSG"
+git commit -m "$COMMIT_MSG"
+
+# Step 4: Push the changes to the 'origin' remote and 'main' branch
+echo "Pushing changes to GitHub (origin/main)..."
+git push origin main
+
+echo "Script execution completed!"
