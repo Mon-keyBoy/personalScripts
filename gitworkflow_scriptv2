@@ -25,7 +25,7 @@ echo "Committing changes with message: $COMMIT_MSG"
 git commit -m "$COMMIT_MSG"
 
 # Step 4: Push the changes to the 'origin' remote and 'main' branch
-echo "Pushing changes to GitHub (origin/main)..."
-git push origin main
+echo "Pushing changes to GitHub..."
+git push
 
 echo "Script execution completed!"
