@@ -1,14 +1,19 @@
 #!/bin/bash
 
 # apt update && apt upgrade -y && apt install curl
+# RUN AS NORMAL USER
+if [ "$EUID" -eq 0 ]; then
+  echo "❌ Do not run this script as root."
+  exit 1
+fi
 
-apt install -y git capstone gdb python3 python3-pip tmux
+sudo apt install -y git capstone gdb python3 python3-pip tmux python3-venv
 
 # Define installation path
-INSTALL_DIR_PWNDBG="/root/pwndbg"
+INSTALL_DIR_PWNDBG="/pwndbg"
 SOURCE_CMD_PWNDBG="source $INSTALL_DIR_PWNDBG/gdbinit.py"
 
-INSTALL_DIR_GEF="/root/gef"
+INSTALL_DIR_GEF="/gef"
 SOURCE_CMD_GEF="source $INSTALL_DIR_GEF/gdbinit.py"
 
 GDBINIT_FILE="$HOME/.gdbinit"
@@ -18,21 +23,11 @@ if [ ! -e "$HOME/.gdbinit" ]; then
     touch "$HOME/.gdbinit"
 fi
 
-
-
-# Ensure running as root
-if [ "$(id -u)" -ne 0 ]; then
-    echo "Please run this script as root (sudo su && ./setupgdb.sh)"
-    exit 1
-fi
-
 # Ensure script is run from the home directory
 if [ "$PWD" != "$HOME" ]; then
     echo "[-] Please run this script from your home directory: $HOME"
     exit 1
 fi
-
-
 
 # Clone Pwndbg if not already cloned
 if [ ! -d "$INSTALL_DIR_PWNDBG" ]; then
@@ -51,19 +46,26 @@ fi
 
 
 # Go into pwndbg repo
-cd "$INSTALL_DIR_PWNDBG" && ./setup.sh
+sudo chmod +x setup.sh
+cd "$INSTALL_DIR_PWNDBG" && sudo ./setup.sh
 
 # Go into gef repo
-cd "$INSTALL_DIR_GEF" && ./install.sh
+sudo chmod +x install.sh
+cd "$INSTALL_DIR_GEF" && sudo ./install.sh
 
 
 
 # run "use-gef" or "use-pwndbg" within gdb to switch to that one 
 
+# default to pwndbg
+echo "source $INSTALL_DIR_PWNDBG/gdbinit.py" >> "$GDBINIT_FILE"
+echo "" >> "$GDBINIT_FILE"
+
 # Add command to switch to Pwndbg
 echo "define use-pwndbg" >> "$GDBINIT_FILE"
 echo "  source $INSTALL_DIR_PWNDBG/gdbinit.py" >> "$GDBINIT_FILE"
 echo "end" >> "$GDBINIT_FILE"
+echo "" >> "$GDBINIT_FILE"
 
 # Add command to switch to GEF
 echo "define use-gef" >> "$GDBINIT_FILE"
