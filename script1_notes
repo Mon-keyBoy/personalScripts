@@ -1,7 +1,0 @@
-Made the workflow script [gitworkflow_script] by ripping it line for line from chatGPT.
-Then I made it executable with the command "chmod +x 'file/path'".
-
-Then I went into the ~/bashrc file and added the following line at the end:
-alias gwf='~/Desktop/ducky/gitworkflow_script'
-
-This alias now works everytime I use it, even in newly opened terminals!
