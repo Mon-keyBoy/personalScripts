@@ -1,0 +1,2 @@
+control + w 		= delete word(like what control backspace does)
+control + shift + v 	= paste instead of just control v
