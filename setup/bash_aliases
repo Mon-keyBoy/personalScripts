@@ -10,5 +10,4 @@ alias ga='git add'
 alias gc='git commit -m"$*"'
 alias gp='git push'
 alias po='poweroff'
-alias m='vlc --random ~/music/prod/*.mp3 & disown'
-
+alias m='vlc --random ~/personalScripts/music/prod/*.mp3 & disown'
